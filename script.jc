@@ -1,0 +1,13 @@
+// script.js
+
+// Example: Start Game button
+document.getElementById("startBtn").addEventListener("click", () => {
+  alert("Game started!");
+  // You can replace this with a fetch() or WebSocket call to your game server
+});
+
+// Example: Update status
+function updateStatus(message) {
+  const statusDiv = document.querySelector(".status");
+  statusDiv.textContent = message;
+}
