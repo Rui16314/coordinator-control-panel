@@ -1,12 +1,54 @@
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyACOFclVLKMniDxCmrzSQ9kkznfCh161_8",
-  authDomain: "coordinator-control-panel.firebaseapp.com",
-  projectId: "coordinator-control-panel",
- 
-  };
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Coordinator Dashboard</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <h1>🧪 Experiment Results</h1>
+  <table id="results-table">
+    <thead>
+      <tr>
+        <th>Name</th><th>Age</th><th>Gender</th><th>Race</th><th>Final Payoff</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    // 🔐 Replace with your Firebase config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "your-project-id.firebaseapp.com",
+      projectId: "your-project-id"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    db.collection("experiment2_results").get().then(snapshot => {
+      const tbody = document.querySelector("#results-table tbody");
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        const row = `<tr>
+          <td>${d.name || ""}</td>
+          <td>${d.age || ""}</td>
+          <td>${d.gender || ""}</td>
+          <td>${d.race || ""}</td>
+          <td>${d.X || ""}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    });
+  </script>
+</body>
+</html>
+
