@@ -17,20 +17,16 @@ const db = getFirestore(app);
 
 // Update game status
 function updateStatus(gameId, status) {
-  db.collection("coordinator control panel").doc("global_states").update({
-    [gameId]: status
-  }).then(() => {
-    alert(`${gameId} set to ${status}`);
-  });
+  const ref = doc(db, "coordinator control panel", "global_states");
+  updateDoc(ref, { [gameId]: status });
 }
 
-// Listen for status changes
 function listenStatus(gameId, elementId) {
-  db.collection("coordinator control panel").doc("global_states")
-    .onSnapshot((doc) => {
-      const data = doc.data();
-      document.getElementById(elementId).textContent = data[gameId] || "unknown";
-    });
+  const ref = doc(db, "coordinator control panel", "global_states");
+  onSnapshot(ref, (docSnap) => {
+    const data = docSnap.data();
+    document.getElementById(elementId).textContent = data[gameId] || "unknown";
+  });
 }
 
 // Initialize listeners
