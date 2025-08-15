@@ -1,5 +1,6 @@
-// Firebase setup
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, doc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyACOFclVLKMniDxCmrzSQ9kkznfCh161_8",
   authDomain: "coordinator-control-panel.firebaseapp.com",
@@ -11,6 +12,8 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // Update game status
 function updateStatus(gameId, status) {
