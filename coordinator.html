@@ -1,60 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Coordinator Control Panel</title>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
-  <style>
-    body { font-family: Arial; padding: 20px; }
-    .game-block { margin-bottom: 20px; }
-    .status { font-weight: bold; margin-left: 10px; }
-    button { margin-right: 10px; }
-  </style>
-</head>
-<body>
-  <h1>Coordinator Control Panel</h1>
 
-  <div class="game-block">
-    <h3>Experiment 2</h3>
-    <span>Status: <span id="exp2-status" class="status">Loading...</span></span><br><br>
-    <button onclick="updateStatus('experiment2', 'started')">Start</button>
-    <button onclick="updateStatus('experiment2', 'ended')">End</button>
-    <button onclick="updateStatus('experiment2', 'waiting')">Reset</button>
-  </div>
+  <!-- v9 Modular SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      onSnapshot,
+      updateDoc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-  <script>
-    // Firebase config
+    // ← Replace with your actual Firebase client config
     const firebaseConfig = {
       apiKey: "AIzaSyACOFclVLKMniDxCmrzSQ9kkznfCh161_8",
       authDomain: "coordinator-control-panel.firebaseapp.com",
       projectId: "coordinator-control-panel",
-      storageBucket: "coordinator-control-panel.firebasestorage.app",
+      storageBucket: "coordinator-control-panel.appspot.com",
       messagingSenderId: "173014992661",
       appId: "1:173014992661:web:43f45fdd133c4ef2fa8b1c"
     };
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    // Initialize Firebase + Firestore
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
 
-    // Read status
-    function fetchStatus() {
-      db.collection("coordinator control panel").doc("global_states")
-        .onSnapshot((doc) => {
-          const data = doc.data();
-          document.getElementById("exp2-status").textContent = data.experiment2 || "unknown";
-        });
-    }
+    // Reference the single doc that holds all experiment statuses
+    const exp2Doc = doc(db, "global_states", "experiment2");
 
-    // Update status
-    function updateStatus(experiment, status) {
-      db.collection("coordinator control panel").doc("global_states").update({
-        [experiment]: status
-      });
-    }
+    // Live‐update the status label whenever the doc changes
+    onSnapshot(exp2Doc, (snap) => {
+      const data = snap.exists() ? snap.data() : {};
+      document.getElementById("exp2-status").textContent = data.status || "waiting";
+    });
 
-    fetchStatus();
+    // Expose this function so your buttons can call it
+    window.updateStatus = async function(newStatus) {
+      try {
+        // Use setDoc if you want to create the doc on first run
+        await setDoc(exp2Doc, { status: newStatus }, { merge: true });
+      } catch (err) {
+        console.error("Failed to update status:", err);
+        alert("Error: " + err.message);
+      }
+    };
   </script>
+
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .game-block { margin-bottom: 20px; }
+    .status    { font-weight: bold; margin-left: 5px; }
+    button     { margin-right: 10px; padding: 0.5em 1em; }
+  </style>
+</head>
+<body>
+  <h1>Coordinator Control Panel</h1>
+  <div class="game-block">
+    <h3>Experiment 2</h3>
+    <div>
+      Status:
+      <span id="exp2-status" class="status">Loading…</span>
+    </div>
+    <br/>
+    <button onclick="updateStatus('started')">Start</button>
+    <button onclick="updateStatus('ended')">End</button>
+    <button onclick="updateStatus('waiting')">Reset</button>
+  </div>
 </body>
 </html>
+
 
