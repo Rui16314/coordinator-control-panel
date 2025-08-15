@@ -1,39 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Coordinator Panel</title>
+  <title>Coordinator Control Panel</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 20px; }
-    .game { margin-bottom: 20px; }
+    body { font-family: Arial; padding: 20px; }
+    .game-block { margin-bottom: 20px; }
+    .status { font-weight: bold; margin-left: 10px; }
     button { margin-right: 10px; }
   </style>
 </head>
 <body>
-  <h1>🎮 Coordinator Panel</h1>
+  <h1>Coordinator Control Panel</h1>
 
-  <div class="game">
-    <h2>Investment Game</h2>
-    <button onclick="setStatus('investment_game', 'started')">Start</button>
-    <button onclick="setStatus('investment_game', 'ended')">End</button>
-    <button onclick="setStatus('investment_game', 'waiting')">Reset</button>
-  </div>
-
-  <div class="game">
-    <h2>Reaction Game</h2>
-    <button onclick="setStatus('reaction_game', 'started')">Start</button>
-    <button onclick="setStatus('reaction_game', 'ended')">End</button>
-    <button onclick="setStatus('reaction_game', 'waiting')">Reset</button>
+  <div class="game-block">
+    <h3>Experiment 2</h3>
+    <span>Status: <span id="exp2-status" class="status">Loading...</span></span><br><br>
+    <button onclick="updateStatus('experiment2', 'started')">Start</button>
+    <button onclick="updateStatus('experiment2', 'ended')">End</button>
+    <button onclick="updateStatus('experiment2', 'waiting')">Reset</button>
   </div>
 
   <script>
-    async function setStatus(game, status) {
-      await fetch('https://your-server.com/update_game_state', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ game, status })
-      });
-      alert(`${game} set to ${status}`);
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Read status
+    function fetchStatus() {
+      db.collection("coordinator control panel").doc("global_states")
+        .onSnapshot((doc) => {
+          const data = doc.data();
+          document.getElementById("exp2-status").textContent = data.experiment2 || "unknown";
+        });
     }
+
+    // Update status
+    function updateStatus(experiment, status) {
+      db.collection("coordinator control panel").doc("global_states").update({
+        [experiment]: status
+      });
+    }
+
+    fetchStatus();
   </script>
 </body>
 </html>
+
