@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Coordinator Panel</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .game { margin-bottom: 20px; }
+    button { margin-right: 10px; }
+  </style>
+</head>
+<body>
+  <h1>🎮 Coordinator Panel</h1>
+
+  <div class="game">
+    <h2>Investment Game</h2>
+    <button onclick="setStatus('investment_game', 'started')">Start</button>
+    <button onclick="setStatus('investment_game', 'ended')">End</button>
+    <button onclick="setStatus('investment_game', 'waiting')">Reset</button>
+  </div>
+
+  <div class="game">
+    <h2>Reaction Game</h2>
+    <button onclick="setStatus('reaction_game', 'started')">Start</button>
+    <button onclick="setStatus('reaction_game', 'ended')">End</button>
+    <button onclick="setStatus('reaction_game', 'waiting')">Reset</button>
+  </div>
+
+  <script>
+    async function setStatus(game, status) {
+      await fetch('https://your-server.com/update_game_state', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ game, status })
+      });
+      alert(`${game} set to ${status}`);
+    }
+  </script>
+</body>
+</html>
