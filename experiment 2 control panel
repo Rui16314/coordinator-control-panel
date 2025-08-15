@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Coordinator Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      color: #333;
+    }
+    button {
+      margin: 15px;
+      padding: 15px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .start { background-color: #4CAF50; color: white; }
+    .end { background-color: #f44336; color: white; }
+    .view { background-color: #2196F3; color: white; }
+    .download { background-color: #FF9800; color: white; }
+  </style>
+</head>
+<body>
+
+  <h1>Game Control Panel</h1>
+
+  <button class="start" onclick="startGame()">Start Game</button>
+  <button class="end" onclick="endGame()">End Game</button>
+  <button class="view" onclick="viewResults()">View Results</button>
+  <button class="download" onclick="downloadCSV()">Download CSV</button>
+
+  <script>
+    function startGame() {
+      fetch('https://REGION-PROJECT.cloudfunctions.net/startGame', { method: 'POST' })
+        .then(() => alert('Game started!'))
+        .catch(() => alert('Failed to start game.'));
+    }
+
+    function endGame() {
+      fetch('https://REGION-PROJECT.cloudfunctions.net/endGame', { method: 'POST' })
+        .then(() => alert('Game ended!'))
+        .catch(() => alert('Failed to end game.'));
+    }
+
+    function viewResults() {
+      window.open('https://storage.googleapis.com/my-bucket/final_visualization.png', '_blank');
+    }
+
+    function downloadCSV() {
+      window.open('https://storage.googleapis.com/my-bucket/results/final_scores.csv', '_blank');
+    }
+  </script>
+
+</body>
+</html>
