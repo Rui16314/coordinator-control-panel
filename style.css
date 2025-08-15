@@ -1,0 +1,53 @@
+/* Reset some default styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Body styling */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Header */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Status message */
+.status {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+/* Button styling */
+button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #005a9e;
+}
+
+/* Panel container */
+.panel {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
